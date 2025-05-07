@@ -36,6 +36,7 @@ public class MainManager : MonoBehaviour
         availableGames.Add(new MiniGameInfo("FlapScene", "FlappyPlane", "비행기를 조종(스페이스바, 마우스 클릭)해 장애물을 피하세요!"));
         availableGames.Add(new MiniGameInfo("DungeonScene", "TopDown_Survival", "몰려오는 몬스터를 처치(W, A, S, D로 움직이고)" +
             "마우스로 조종, 클릭으로 발사)하고 살아남으세요!"));
+        availableGames.Add(new MiniGameInfo("DodgeScene", "Watch_Out!", "운전중(W, A, S, D)에 길바닥에 있는 쓰래기를 피하고 안전운전 하세요!"));
     }
 
     // 게임 시작

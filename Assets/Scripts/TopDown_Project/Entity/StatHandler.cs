@@ -28,6 +28,7 @@ public class StatHandler : MonoBehaviour
         Health += amount;
         Debug.Log($"체력 회복: {amount}, 현재 체력: {Health}");
     }
+    //테스트용
     private void Update()
     {
         // 예시: F 키를 누르면 데미지, H 키를 누르면 회복
