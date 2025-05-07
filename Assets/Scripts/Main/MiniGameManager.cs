@@ -8,7 +8,7 @@ using UnityEditor;
 public abstract class MiniGameManager : MonoBehaviour
 {
     public string gameId;
-    public TextMeshProUGUI scoreText;
+    public Text scoreText;
     public GameObject gameOverPanel;
 
     protected int currentScore = 0;
@@ -38,7 +38,7 @@ public abstract class MiniGameManager : MonoBehaviour
     protected virtual void UpdateScoreUI()
     {
         if (scoreText != null)
-            scoreText.text = currentScore.ToString();
+            scoreText.text = "현재 점수 : " + currentScore;
     }
 
     // 게임 종료
@@ -47,6 +47,7 @@ public abstract class MiniGameManager : MonoBehaviour
         if (!isGameOver)
         {
             isGameOver = true;
+            scoreText.gameObject.SetActive(false);
 
             // 게임 종료 패널 표시
             if (gameOverPanel != null)
