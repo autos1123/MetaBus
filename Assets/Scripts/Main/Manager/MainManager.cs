@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEditor;
 
 public class MainManager : MonoBehaviour
 {
@@ -17,6 +18,7 @@ public class MainManager : MonoBehaviour
 
     private void Awake()
     {
+        Time.timeScale = 1.0f;
         // 싱글톤 패턴 적용
         if (Instance == null)
         {
@@ -29,6 +31,22 @@ public class MainManager : MonoBehaviour
             Destroy(gameObject);
         }
     }
+    private void Update()
+    {
+        // ESC 키를 눌렀을 때 애플리케이션 종료
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Debug.Log("ESC 키 눌림 - 애플리케이션 종료");
+
+            // 에디터에서 게임을 종료하는 코드
+#if UNITY_EDITOR
+            UnityEditor.EditorApplication.isPlaying = false;
+#else
+            // 빌드된 게임에서는 어플리케이션 종료
+            Application.Quit();
+#endif
+        }
+    }
 
     private void InitializeGames()
     {
@@ -36,7 +54,7 @@ public class MainManager : MonoBehaviour
         availableGames.Add(new MiniGameInfo("FlapScene", "FlappyPlane", "비행기를 조종(스페이스바, 마우스 클릭)해 장애물을 피하세요!"));
         availableGames.Add(new MiniGameInfo("DungeonScene", "TopDown_Survival", "몰려오는 몬스터를 처치(W, A, S, D로 움직이고)" +
             "마우스로 조종, 클릭으로 발사)하고 살아남으세요!"));
-        availableGames.Add(new MiniGameInfo("DodgeScene", "Watch_Out!", "운전중(W, A, S, D)에 길바닥에 있는 쓰래기를 피하고 안전운전 하세요!"));
+        availableGames.Add(new MiniGameInfo("DodgeScene", "Watch_Out!", "운전중(방향키)에 길바닥에 있는 쓰래기를 피하고 안전운전 하세요!"));
     }
 
     // 게임 시작
@@ -45,6 +63,7 @@ public class MainManager : MonoBehaviour
         Debug.Log($"[StartGame] gameId: {selectId}");
         SceneManager.LoadScene(selectId);
     }
+
 
     // 메인 화면으로 돌아가기
     public void ReturnToMain()

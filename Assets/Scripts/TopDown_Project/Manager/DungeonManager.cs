@@ -61,6 +61,14 @@ public class DungeonManager : MiniGameManager
         {
             StartGame();
         }
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            RestartGame();
+        }
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            ReturnToMain();
+        }
     }
     public override void AddScore(int points)
     {
