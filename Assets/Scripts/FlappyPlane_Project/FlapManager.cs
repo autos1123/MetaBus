@@ -44,7 +44,6 @@ public class FlapManager : MiniGameManager
 
     public void StartGame()
     {
-        uiManager.UpdateScore(0);
         startText.gameObject.SetActive(false);
         Time.timeScale = 1.0f;
     }

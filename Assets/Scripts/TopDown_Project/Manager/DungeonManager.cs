@@ -1,6 +1,8 @@
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
-public class DungeonManager : MonoBehaviour
+public class DungeonManager : MiniGameManager
 {
     public static DungeonManager instance;
 
@@ -8,6 +10,8 @@ public class DungeonManager : MonoBehaviour
     private ResourceController _playerResourceController;
 
     [SerializeField] private int currentWaveIndex = 0;
+    [SerializeField] private Text waveText;
+    [SerializeField] private Text startInfoText;
 
     private EnemyManager enemyManager;
 
@@ -23,6 +27,7 @@ public class DungeonManager : MonoBehaviour
 
     public void StartGame()
     {
+        startInfoText.gameObject.SetActive(false);
         StartNextWave();
     }
 
@@ -34,19 +39,31 @@ public class DungeonManager : MonoBehaviour
 
     public void EndOfWave()
     {
+        waveText.text = "현재 웨이브 : " + currentWaveIndex;
+        // 웨이브 번호에 따라 점수 계산
+        int pointsForWave = 100 + (currentWaveIndex * 20);  // 웨이브 번호에 따라 점수 증가
+        AddScore(pointsForWave); // 계산된 점수 추가
         StartNextWave();
     }
 
-    public void GameOver()
+    public override void GameOver()
     {
         enemyManager.StopWave();
+        waveText.gameObject.SetActive(false);
+        base.GameOver();
+        
     }
+
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.E))
         {
             StartGame();
         }
+    }
+    public override void AddScore(int points)
+    {
+        base.AddScore(points);
     }
 }

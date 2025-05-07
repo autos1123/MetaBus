@@ -13,8 +13,6 @@ public class PlayerController : BaseController
         camera = Camera.main;
     }
 
-    
-
     protected override void HandleAction()
     {
         float horizontal = Input.GetAxisRaw("Horizontal");
