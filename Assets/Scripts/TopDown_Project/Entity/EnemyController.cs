@@ -8,6 +8,7 @@ public class EnemyController : BaseController
     private Transform target;
 
     [SerializeField] private float followRange = 15f;
+    [SerializeField] private int scoreValue = 50;
 
     public void Init(EnemyManager enemyManager, Transform target)
     {
@@ -65,7 +66,9 @@ public class EnemyController : BaseController
     }
     public override void Death()
     {
-        base.Death(); 
+        base.Death();
+        // 몬스터가 죽었을 때 DungeonManager에 점수 추가
+        DungeonManager.instance.AddScore(scoreValue);
         enemyManager.RemoveEnemyOnDeath(this);
     }
 }
