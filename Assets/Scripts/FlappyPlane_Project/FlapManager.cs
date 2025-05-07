@@ -1,11 +1,16 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
-public class FlapManager : MonoBehaviour
+public class FlapManager : MiniGameManager
 {
+    [SerializeField] private TextMeshProUGUI Score;
+    [SerializeField] private TextMeshProUGUI BestScore;
+    [SerializeField] private Text startText;
     static FlapManager gameManager; // GameManager의 싱글톤 인스턴스를 저장할 정적 변수
 
     public static FlapManager Instance // 외부에서 접근 가능한 싱글톤 인스턴스 프로퍼티
@@ -13,7 +18,6 @@ public class FlapManager : MonoBehaviour
         get { return gameManager; } // 인스턴스 반환
     }
 
-    private int currentScore = 0; // 현재 점수를 저장할 변수
     UIManager uiManager; // UIManager 인스턴스를 저장할 변수
 
     public UIManager UIManager // 외부에서 UIManager에 접근할 수 있도록 하는 프로퍼티
@@ -26,27 +30,40 @@ public class FlapManager : MonoBehaviour
         gameManager = this; // 현재 인스턴스를 싱글톤으로 지정
         uiManager = FindObjectOfType<UIManager>(); // 씬에서 UIManager를 찾아 할당
     }
-
-    private void Start() // 게임이 시작될 때 호출되는 메서드
+    private void Update()
     {
-        uiManager.UpdateScore(0); // 초기 점수를 UI에 표시
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            StartGame();
+        }
+    }
+    protected override void Start()
+    {
+        Time.timeScale = 0.0f;
     }
 
-    public void GameOver() // 게임 오버 처리 메서드
+    public void StartGame()
     {
-        Debug.Log("Game Over"); // 디버그 로그 출력
-        uiManager.SetRestart(); // UIManager를 통해 재시작 UI 설정
+        uiManager.UpdateScore(0);
+        startText.gameObject.SetActive(false);
+        Time.timeScale = 1.0f;
     }
 
-    public void RestartGame() // 게임을 재시작하는 메서드
+    public override void GameOver()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name); // 현재 씬을 다시 로드하여 게임 재시작
+        base.GameOver();
+        int highScore = MainManager.Instance.GetHighScore(gameId); // 최고 점수 가져오기
+        Score.text = currentScore.ToString();
+        BestScore.text = highScore.ToString();
     }
 
-    public void AddScore(int score) // 점수를 추가하는 메서드
+    public override void RestartGame()
     {
-        currentScore += score; // 현재 점수에 전달된 점수를 추가
-        uiManager.UpdateScore(currentScore); // 변경된 점수를 UI에 반영
-        Debug.Log("Score: " + currentScore); // 현재 점수를 디버그 로그로 출력
+        base.RestartGame();
+    }
+
+    public override void AddScore(int points)
+    {
+        base.AddScore(points);
     }
 }
