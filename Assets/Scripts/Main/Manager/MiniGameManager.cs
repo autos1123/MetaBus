@@ -55,6 +55,7 @@ public abstract class MiniGameManager : MonoBehaviour
 
             // 최고 점수 갱신
             MainManager.Instance.UpdateHighScore(gameId, currentScore);
+            Time.timeScale = 0.0f;
         }
     }
 

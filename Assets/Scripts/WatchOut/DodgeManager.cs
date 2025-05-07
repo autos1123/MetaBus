@@ -29,6 +29,7 @@ public class DodgeManager : MiniGameManager
     }
     protected override void Start()
     {
+        Time.timeScale = 0.0f;
         base.Start();
         // Update 함수에 입력하면 너무많이 생성하므로 Invoke를 걸어서 일정 시간마다 소환할 수 있게 반복함.
         InvokeRepeating("MakeTrash", 0.0f, 1.0f);
@@ -37,10 +38,19 @@ public class DodgeManager : MiniGameManager
     // Update is called once per frame
     void Update()
     {
-        
-        infoScoreTxt.text = dodgedCount.ToString();
-        scoreTxt.text = dodgedCount.ToString();
-        bestResultScoreTxt.text = bestDodgedCount.ToString();
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            infoImg.gameObject.SetActive(false);
+            StartGame();
+        }
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            RestartGame();
+        }
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            ReturnToMain();
+        }
 
     }
     void MakeTrash()
@@ -50,20 +60,28 @@ public class DodgeManager : MiniGameManager
     public override void GameOver()
     {
         base.GameOver();
+        scoreText.text = currentScore.ToString();
+        // UpdateHighScore 메서드를 사용하여 최고 점수 갱신
+        // GameManager 또는 다른 클래스에 이 메서드가 있다고 가정
+        MainManager.Instance.UpdateHighScore("DodgeGame", dodgedCount);
+
+        // HighScores 딕셔너리에서 최고 점수 가져오기
+        bestDodgedCount = MainManager.Instance.HighScores.ContainsKey("DodgeGame")
+            ? MainManager.Instance.HighScores["DodgeGame"]
+            : 0;
+
+        bestResultScoreTxt.text = bestDodgedCount.ToString();
     }
+
     // 쓰래기를 피하면(기준 : 쓰래기가 파괴되었을때 Trash.cs 참조) dodgedCount 1씩 상승
     public void DodgedTrash()
     {
         dodgedCount++;
+        AddScore(1);
     }
-
-    public void CheckHighScore()
+    public void StartGame()
     {
-        int bestScore = PlayerPrefs.GetInt("BestDodgedCount", 0);
-        if (dodgedCount > bestScore)
-        {
-            PlayerPrefs.SetInt("BestDodgeCount", dodgedCount);
-        }
+        Time.timeScale = 1.0f;
     }
    
     // 
